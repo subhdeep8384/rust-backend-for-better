@@ -16,7 +16,7 @@ pub async fn get_website(
 ) -> String {
 
     let s = Store {};
-    s.create_user();
+    
 
     format!("website : {}", website_id)
 }
@@ -28,7 +28,7 @@ pub async fn create_website(
 
     let s = Store {};
 
-    let id = s.create_user();
+    let id = s.create_website();
 
     Json(CreateWebsitesOutput {
         id
