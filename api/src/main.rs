@@ -14,10 +14,10 @@ async fn get_website(Path(website_id): Path<String>) -> String {
 
 #[handler]
 async fn create_website(Json(data) : Json<CreateWebsiteInput>) -> Json<CreateWebsitesOutput> {
-    let url = data.url ;
+    let _url = data.url ;
     // presist this in the database
     let response = CreateWebsitesOutput{
-        id : String::from("ID")
+        id : _url
     } ;
     Json(response) 
 }
