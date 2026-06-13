@@ -1,36 +1,39 @@
 use poem::{
-    Route, Server, get, handler, listener::TcpListener, post, web::{Json, Path}
+    Route,
+    Server,
+    get,
+    post,
+    listener::TcpListener,
 };
 
-use crate::{request_inputs::CreateWebsiteInput, request_output::CreateWebsitesOutput};
+mod request_inputs;
+mod request_output;
+mod handler;
 
-pub mod request_inputs;
-pub mod request_output;
+use handler::website::{
+    get_website,
+    create_website,
+};
 
-#[handler]
-async fn get_website(Path(website_id): Path<String>) -> String {
-    format!("website : {}", website_id)
-}
-
-#[handler]
-async fn create_website(Json(data) : Json<CreateWebsiteInput>) -> Json<CreateWebsitesOutput> {
-    let _url = data.url ;
-    // presist this in the database
-    let response = CreateWebsitesOutput{
-        id : _url
-    } ;
-    Json(response) 
-}
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let app = Route::new()
-    .at("/website/:website_id", get(get_website))
-    .at( "/website", post(create_website))
-    ;
+async fn main()
+-> Result<(), Box<dyn std::error::Error>> {
 
-    Server::new(TcpListener::bind("127.0.0.1:3000"))
-        .run(app)
-        .await?;
+    let app = Route::new()
+        .at(
+            "/website/:website_id",
+            get(get_website)
+        )
+        .at(
+            "/website",
+            post(create_website)
+        );
+
+    Server::new(
+        TcpListener::bind("127.0.0.1:3000")
+    )
+    .run(app)
+    .await?;
 
     Ok(())
 }
